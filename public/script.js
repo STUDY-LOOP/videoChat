@@ -6,8 +6,9 @@ const muteBtn = document.querySelector("#mute");
 const cameraBtn = document.querySelector("#camera");
 
 const myPeer = new Peer(undefined, {
+    path: "/peerjs",
     host: "/",
-    port: "3001"
+    port: "3000"
 });
 const myVideo = document.createElement("video");
 myVideo.muted = true;

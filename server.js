@@ -1,8 +1,13 @@
 const express = require("express");
+const { ExpressPeerServer } = require("peer");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const { v4: uuidV4 } = require("uuid");
+
+const peerServer = ExpressPeerServer(server, {
+    debug: true
+});  
 
 let studyRoomId;
 let Nickname;
@@ -10,6 +15,7 @@ let Nickname;
 app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(express.urlencoded({extended:false}));      // body-parser
+app.use('/peerjs', peerServer);
 
 app.get("/", (req, res) => {
     res.render("studyHome");
@@ -42,4 +48,4 @@ io.on("connection", socket => {
     })
 });
 
-server.listen(3000);
+server.listen(process.env.PORT||3000);
