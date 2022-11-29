@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+        const NICKNAME = "<%= nickname %>"
+        const ROOM_ID = "<%= roomID %>"
+    </script>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="chat_app.js"></script>
+
     <title>STUDY HOME</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"></style>
 </head>
@@ -15,11 +23,43 @@
     <main>
         <div>
             <form action="/videoChat" method="post">
-                <input type="text" id="Nickname" name="Nickname" placeholder="Your Name">
-                <input type="text" id="StudyName" name="StudyName" placeholder="Your Study">
-                <input type="submit" id="btnEnterRoom" value="Enter Room">
+                <input type="hidden" id="Nickname" name="Nickname">
+                <input type="hidden" id="StudyName" name="StudyName">
+                <input type="submit" id="btnEnterRoom" value="Enter Video Chat">
+            </form>
+        </div>
+
+        <!-- <div id="welcome">
+            <form>
+                <input type="text" placeholder="room name" required>
+                <button>Enter Room</button>
+            </form>
+        </div> -->
+
+        <div id="chatRoom">
+            <ul></ul>
+            <!-- <form id="name">
+                <input type="text" placeholder="nickname" required>
+                <button>Save</button>
+            </form> -->
+
+            <form id="notice">
+                <input type="text" placeholder="notice" required>
+                <button>Send</button>
+            </form>
+
+            <form id="msg">
+                <input type="text" placeholder="message" required>
+                <button>Send</button>
             </form>
         </div>
     </main>
+
+    <script>
+        document.getElementById("Nickname").value = NICKNAME;
+        document.getElementById("StudyName").value = ROOM_ID; 
+
+        console.log(ROOM_ID, NICKNAME);
+    </script>
 </body>
 </html>
