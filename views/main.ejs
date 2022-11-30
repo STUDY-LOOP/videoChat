@@ -11,15 +11,15 @@
 </head>
 <body>
     <header>
-        <h1> TEAM12 - STUDY LIST</h1>
+        <h1> TEAM12 - LOG IN</h1>
     </header>
 
     <main>
         <div>
-            <form action="/studyHome" method="post">
-                <!--input type="text" id="Nickname" name="Nickname" placeholder="Your Name"-->
-                <input type="text" id="StudyName" name="StudyName" placeholder="Your Study">
-                <input type="submit" id="btnEnterRoom" value="Enter Room">
+            <form action="/login" method="post">
+                <input type="text" name="input_id" placeholder="ID" require>
+                <input type="text" name="input_pw" placeholder="Password" require>
+                <input type="submit" id="btnLogin" value="Log in">
             </form>
         </div>
     </main>
