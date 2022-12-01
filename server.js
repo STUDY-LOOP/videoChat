@@ -12,9 +12,9 @@ const peerServer = ExpressPeerServer(server, {
     debug: true
 }); 
 
+
 let studyRoomId;
 let Nickname;
-
 
 /****** Database ******/
 
@@ -39,7 +39,6 @@ var time = `${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSecond
 var formattedDateTime = `${year}-${month}-${day} ${time}`;
 //console.log(formattedDateTime);
 
-
 /****** view, server setting ******/
 
 app.set("view engine", "ejs");
@@ -59,7 +58,8 @@ app.use(session({
 
 app.get("/", (req, res) => {
     res.render("main");
-});
+});   
+
 app.post("/", (req, res) => {
     res.render("main");
 });
@@ -118,6 +118,7 @@ app.post("/studyHome", (req, res) => {
     //Nickname = req.body.Nickname;
     Nickname = req.session.username;
     res.render("studyHome", { roomID: studyRoomId, nickname: Nickname });
+
 });
 app.post('/videoChat', (req, res) => {
   studyRoomId = req.body.StudyName;
@@ -184,21 +185,18 @@ io.on("connection", socket => {
     
     //video chat
     socket.on("join-room", (roomId, userId) => {
+
         socket.join(roomId);
-        // version A
-        socket.to(roomId).emit("user-connected", userId);
 
-    /*
-        // version B
-        socket.on('connection-request',(roomId, userId) => {
-            socket.to(roomId).emit("new-user-connected", userId);
+
+        socket.on('connection-request',(roomId, userId, nickname) => {
+            socket.to(roomId).emit("new-user-connected", userId, nickname);
         });
-        */
 
-    socket.on('disconnect', () => {
-      socket.to(roomId).emit('user-disconnected', userId);
-    });
-  });
+        socket.on('disconnect', () => {
+            socket.to(roomId).emit('user-disconnected', userId);
+        });
+    })
 });
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
 server.listen(process.env.PORT || 3000, handleListen);
