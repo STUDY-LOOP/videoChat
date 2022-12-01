@@ -18,6 +18,7 @@ let Nickname;
 /****** Database ******/
 
 const mysql = require("mysql");
+const { connect } = require("http2");
 const connectDB = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -48,12 +49,40 @@ app.use(session({
 app.get("/", (req, res) => {
     res.render("main");
 });
+app.post("/", (req, res) => {
+    res.render("main");
+});
+app.post('/signup', function(req, res) {
+    res.render("signup");
+});
+app.post('/signup_process', function(req, res) {
+    let input_id = req.body.input_id;
+    let input_pw = req.body.input_pw;
+
+    connectDB.query('SELECT * FROM user WHERE u_id = ?', [input_id], function(error, results, fields) {
+        if (error) console.log(error);
+        if (results.length == 0) {
+            connectDB.query('INSERT INTO `user`(u_id, password) VALUES (?, ?)', [input_id, input_pw], (error, results, fields) => {
+                if (error) console.log(error);
+                else {
+                    console.log("회원가입성공");
+                    res.render("main");
+                }
+                res.end();
+            });
+        } else {
+            res.send('<script type="text/javascript">alert("이미 존재하는 아이디입니다."); document.location.replace("/signup");</script>');
+            res.end();
+        }
+    })
+});
 app.post('/login', function(req, res) {
-    var username = req.body.input_id;
-    var password = req.body.input_pw;
+    let username = req.body.input_id;
+    let password = req.body.input_pw;
 
     if (username && password) {
         connectDB.query('SELECT * FROM user WHERE u_id = ? AND password = ?', [username, password], function(error, results, fields) {
+            console.log(username, password)
             if (error) throw error;
             if (results.length > 0) {
                 req.session.loggedin = true;

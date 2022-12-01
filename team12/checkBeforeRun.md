@@ -33,16 +33,28 @@
         <td>01</td>
         <td>server.js</td>
         <td> </td>
-        <td>studyList.ejs</td>
+        <td>main.ejs</td>
     </tr>
     <tr>
         <td>02</td>
+        <td>server.js</td>
+        <td> </td>
+        <td>signup.ejs</td>
+    </tr>
+    <tr>
+        <td>03</td>
+        <td>server.js</td>
+        <td> </td>
+        <td>studyList.ejs</td>
+    </tr>
+    <tr>
+        <td>04</td>
         <td>server.js</td>
         <td>chat_app.js</td>
         <td>studyHome.ejs</td>
     </tr>
     <tr>
-        <td>03</td>
+        <td>05</td>
         <td>server.js</td>
         <td>script.js</td>
         <td>videoChat.ejs</td>

@@ -5,25 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    
-    <title>STUDY LIST</title>
+    <title>SIGN UP</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"></style>
 </head>
 <body>
     <header>
-        <h1> TEAM12 - LOG IN</h1>
+        <h1> TEAM12 - SIGN UP</h1>
     </header>
 
     <main>
         <div>
-            <form action="/login" method="post">
+            <form action="/signup_process" method="post">
                 <input type="text" name="input_id" placeholder="ID" required>
                 <input type="text" name="input_pw" placeholder="Password" required>
-                <input type="submit" id="btnLogin" value="Log in">
+                <input type="submit" id="btnSignup" value="Sign up">
             </form>
-            <form action="/signup" method="post">
-                <button>Sign up</button>
-            </form>
+            <button onclick="location.replace('/')">Log in</button>
         </div>
     </main>
 </body>
