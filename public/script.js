@@ -39,22 +39,16 @@ navigator.mediaDevices.getUserMedia({
         })
     })
     
-    // version A
-    socket.on("user-connected", userId => {
-        //connectToNewUser(userId, stream);
-        setTimeout(connectToNewUser, 1000, userId, stream);
-    });
-
-    /*
-    // version B
-    socket.emit('connection-request', ROOM_ID, myPeer.peerId);
-    socket.on('new-user-connected', userId =>{
-        if(userId != myPeer.peerId){
-            console.log("New user: "+userId);
-            connectToNewUser(userId,stream);
+    //새 유저 오면,
+    socket.on('new-user-connected', (userId, NICKNAME) =>{
+        if(userId != myPeer.id){
+            console.log("new user connected");
+            console.log("new user's userId: " + userId);
+            console.log("my myPeer.id: " + myPeer.id);
+            connectToNewUser(userId, NICKNAME, stream);
         }
     });
-    */
+    socket.emit('connection-request', ROOM_ID, myPeer.id, NICKNAME);
 
     // 음소거 버튼
     muteBtn.addEventListener("click", () => {
@@ -80,7 +74,27 @@ myPeer.on("open", userId => {
     socket.emit("join-room", ROOM_ID, userId);
 })
 
-function connectToNewUser(userId, stream){
+
+// function connectToNewUser(userId, stream){
+//     // newPeer의 userID, 나의 stream
+//     const call = myPeer.call(userId, stream);
+//     const userDiv = document.createElement("div");
+//     const video = document.createElement("video");
+//     const userNickDiv = document.createElement("span");
+
+//     // 상대방이 그들의 video stream 보내면 작동
+//     call.on("stream", userVideoStream => {
+//         addVideoStream(video, userDiv, userNickDiv, userVideoStream, stream.id);
+//     });
+
+//     call.on("close", () => {
+//         video.remove();
+//     });
+
+//     peers[userId] = call;
+// }
+
+function connectToNewUser(userId, NICKNAME, stream){
     // newPeer의 userID, 나의 stream
     const call = myPeer.call(userId, stream);
     const userDiv = document.createElement("div");
@@ -89,17 +103,17 @@ function connectToNewUser(userId, stream){
 
     // 상대방이 그들의 video stream 보내면 작동
     call.on("stream", userVideoStream => {
-        addVideoStream(video, userDiv, userNickDiv, userVideoStream, stream.id);
+        addVideoStream(video, userDiv, userNickDiv, userVideoStream, NICKNAME, stream.id);
     });
 
     call.on("close", () => {
-        video.remove();
+        userDiv.remove();
     });
 
     peers[userId] = call;
 }
 
-function addVideoStream(video, userDiv, userNickDiv, stream, userId){
+function addVideoStream(video, userDiv, userNickDiv, stream, NICKNAME, userId){
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
         video.play();
@@ -107,7 +121,7 @@ function addVideoStream(video, userDiv, userNickDiv, stream, userId){
     
     //const userDiv = document.createElement("div");
     //const userNickDiv = document.createElement("span");
-    userNickDiv.innerText = userId;
+    userNickDiv.innerText = NICKNAME;
     userDiv.append(video)
     userDiv.append(userNickDiv);
     videoGrid.append(userDiv);
