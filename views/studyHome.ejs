@@ -11,38 +11,33 @@
     </script>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="chat_app.js"></script>
-
     <title>STUDY HOME</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"></style>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css">
+
+    <style>
+        .container {
+            display: grid; 
+            grid-template-columns: 2fr 1fr;
+            padding-right: 200px;
+            padding-left: 200px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1> TEAM12 - STUDY HOME</h1>
     </header>
 
-    <main>
-        <div>
-            <form action="/videoChat" method="post">
-                <input type="hidden" id="Nickname" name="Nickname">
-                <input type="hidden" id="StudyName" name="StudyName">
-                <input type="submit" id="btnEnterRoom" value="Enter Video Chat">
-            </form>
-        </div>
+    <div class="container">
+        <div id="calendar" class="cell-a"></div>
 
-        <!-- <div id="welcome">
-            <form>
-                <input type="text" placeholder="room name" required>
-                <button>Enter Room</button>
-            </form>
-        </div> -->
-
-        <div id="chatRoom">
+        <div id="chatRoom" class="cell-b" style="overflow: auto; width:400px; height:300px;">
             <ul></ul>
-            <!-- <form id="name">
-                <input type="text" placeholder="nickname" required>
-                <button>Save</button>
-            </form> -->
+        </div>
+        
+        <div id="calendar2" class="cell-c"></div>
 
+        <div id="chatEnter" class="cell-d">
             <form id="notice">
                 <input type="text" placeholder="notice" required>
                 <button>Send</button>
@@ -53,7 +48,18 @@
                 <button>Send</button>
             </form>
         </div>
-    </main>
+
+        <div id="buttons" class="cell-e"></div>
+
+        <div id="videoEnter" class="cell-f">
+            <form action="/videoChat" method="post">
+                <input type="hidden" id="Nickname" name="Nickname">
+                <input type="hidden" id="StudyName" name="StudyName">
+                <input type="submit" id="btnEnterRoom" value="Enter Video Chat">
+            </form>
+        </div>
+    </div>
+
 
     <script>
         document.getElementById("Nickname").value = NICKNAME;
