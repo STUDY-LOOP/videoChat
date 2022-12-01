@@ -15,10 +15,12 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
     "localtunnel": "^2.0.2",
     "memorystore": "^1.6.7",
     "mysql": "^2.18.1",
     "peer": "^0.6.1",
+    "read-file": "^0.2.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.5.4",
     "uuid": "^9.0.0"

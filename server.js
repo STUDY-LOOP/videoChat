@@ -7,6 +7,8 @@ const io = require("socket.io")(server);
 const session = require("express-session");
 const MemoryStore = require('memorystore')(session);
 const { v4: uuidV4 } = require("uuid");
+const fs = require("fs");
+const readFile = require("read-file");
 
 const peerServer = ExpressPeerServer(server, {
     debug: true
@@ -20,6 +22,7 @@ let Nickname;
 
 const mysql = require("mysql");
 const { connect } = require("http2");
+const { fstat } = require('fs');
 const connectDB = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -124,6 +127,12 @@ app.post('/videoChat', (req, res) => {
   res.render('videoChat', { roomID: studyRoomId, nickname: Nickname });
 });
 
+app.get('/calendar', (req, res) => {
+    readFile('team12/calendar.jpg', (err, data) => {
+        if(err) { res.send() }
+        res.send(data)
+    })
+})
 
 
 /****** Chat, Video ******/
@@ -161,4 +170,4 @@ io.on("connection", socket => {
     })
 });
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
-server.listen(process.env.PORT || 443, handleListen);
+server.listen(process.env.PORT || 3000, handleListen);

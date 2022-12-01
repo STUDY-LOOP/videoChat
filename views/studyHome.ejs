@@ -12,14 +12,112 @@
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="studyHomeChatScript.js"></script>
     <title>STUDY HOME</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css">
+    <!--link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"-->
 
     <style>
+        header {
+            text-align: center;
+        }
         .container {
             display: grid; 
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 3fr 2fr;
             padding-right: 200px;
             padding-left: 200px;
+        }
+
+        [class*='cell'] {
+            margin: 10px;
+        }
+
+        #calendar{
+            grid-column: 1 / 2;
+            grid-row: 1 / 4;
+
+            text-align: center;
+            height: 500px;
+            
+            border: 1px;
+            border-style: solid;
+            border-color: lightgray;
+        }
+
+        img{
+            width:100%;
+            height:100%;
+            object-fit:contain;
+        }
+
+        #chatRoom{
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+
+            overflow: auto;
+            width:300px;
+            height:400px;
+
+            border: 1px;
+            border-style: solid;
+            border-color: lightgray;
+        }
+
+        span {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        #chatEnter{
+            grid-column: 2 / 4;
+            grid-row: 2 / 3;
+        }
+
+        input[type=text] { 
+            width: 230px;
+            padding: 3px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin: 3px;
+        }
+
+        .btn { 
+            width: 50px;
+            background-color:lightsalmon;
+            padding: 3px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            margin: 3px;
+            border-style: hidden;
+        }
+
+        #buttons{
+            grid-column: 1 / 2;
+            grid-row: 4 / 5;
+        }
+
+        .fake_btn{
+            border-radius: 10%;
+            width: 50px;
+            padding: 3px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            margin: 3px;
+            border-color: lightsalmon;
+            border-style: solid;
+            border-width: 3px;
+            background-color: white;
+        }
+
+        #videoEnter{
+            grid-column: 2 / 3;
+            grid-row: 4 / 5;
+        }
+
+        #btnEnterRoom{
+            width: 300px;
+            border-color: lightsalmon;
+            border-style: solid;
+            padding: 10px;
+            border: 2px;
         }
     </style>
 </head>
@@ -29,27 +127,33 @@
     </header>
 
     <div class="container">
-        <div id="calendar" class="cell-a"></div>
+        <div id="calendar" class="cell-a">
+            <img src="/calendar" alt="calendar"/>
+        </div>
 
-        <div id="chatRoom" class="cell-b" style="overflow: auto; width:400px; height:300px;">
+        <div id="chatRoom" class="cell-b">
+            <br>
+            <span>[CHATTING]</span>
             <ul></ul>
         </div>
         
-        <div id="calendar2" class="cell-c"></div>
-
         <div id="chatEnter" class="cell-d">
             <form id="notice">
                 <input type="text" placeholder="notice" required>
-                <button>Send</button>
+                <button class="btn">Send</button>
             </form>
 
             <form id="msg">
                 <input type="text" placeholder="message" required>
-                <button>Send</button>
+                <button class="btn">Send</button>
             </form>
         </div>
 
-        <div id="buttons" class="cell-e"></div>
+        <div id="buttons" class="cell-e">
+            <button class="fake_btn">📗</button>
+            <button class="fake_btn">📑</button>
+            <button class="fake_btn">👩</button>
+        </div>
 
         <div id="videoEnter" class="cell-f">
             <form action="/videoChat" method="post">
