@@ -1,20 +1,21 @@
 const socket = io();
 
-const room = document.getElementById('chatRoom');
+const chatRoom = document.getElementById('chatRoom');
+const chatEnter = document.getElementById('chatEnter');
 
 let userName = NICKNAME;
 let roomName = ROOM_ID;
 
 //functions
 function addMessage(message) {
-  const ul = room.querySelector('ul');
+  const ul = chatRoom.querySelector('ul');
   const li = document.createElement('li');
   li.innerText = message;
   ul.appendChild(li);
 }
 
 function addNotice(message) {
-  const ul = room.querySelector('ul');
+  const ul = chatRoom.querySelector('ul');
   const li = document.createElement('li');
   li.innerText = message;
   ul.appendChild(li);
@@ -22,7 +23,7 @@ function addNotice(message) {
 
 function handleMessageSubmit(event) {
   event.preventDefault();
-  const input = room.querySelector('#msg input');
+  const input = chatEnter.querySelector('#msg input');
   const value = input.value;
   socket.emit('new_message', input.value, roomName, () => {
     addMessage(`You: ${value}`);
@@ -32,7 +33,7 @@ function handleMessageSubmit(event) {
 
 function handleNoticeSubmit(event) {
   event.preventDefault();
-  const input = room.querySelector('#notice input');
+  const input = chatEnter.querySelector('#notice input');
   const value = input.value;
   socket.emit('new_notice', input.value, roomName, () => {
     addNotice(`NOTICE: ${value}`);
@@ -43,8 +44,8 @@ function handleNoticeSubmit(event) {
 function startChat() {
   const h1 = document.querySelector("h1");
   h1.innerText = `TEAM12 - STUDY HOME : ${roomName}`;
-  const msgForm = room.querySelector('#msg');
-  const noticeForm = room.querySelector('#notice');
+  const msgForm = chatEnter.querySelector('#msg');
+  const noticeForm = chatEnter.querySelector('#notice');
   msgForm.addEventListener('submit', handleMessageSubmit);
   noticeForm.addEventListener('submit', handleNoticeSubmit);
 }
