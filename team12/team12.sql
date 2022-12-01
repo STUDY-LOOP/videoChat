@@ -16,7 +16,7 @@ CREATE TABLE `user` (
 
 CREATE TABLE `chat` (
   `msg_id` int NOT NULL AUTO_INCREMENT,
-  `room_id` int NOT NULL,
+  `room_id` VARCHAR(200) NOT NULL,
   `u_id` varchar(20) NOT NULL,
   `notice` tinyint NOT NULL,
   `content` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,

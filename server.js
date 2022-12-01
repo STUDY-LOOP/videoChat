@@ -143,7 +143,7 @@ io.on('connection', (socket) => {
   // });
   socket.on('new_message', (msg, room, done) => {
     connectDB.query(
-      `INSERT INTO chat (room_id, u_id, notice, content, datetime) VALUES (${studyRoomId}, '${Nickname}', 0, '${msg}', '${formattedDateTime}')`
+      `INSERT INTO chat (room_id, u_id, notice, content, datetime) VALUES ('${studyRoomId}', '${Nickname}', 0, '${msg}', '${formattedDateTime}')`
     );
     socket.to(room).emit('new_message', `${socket.nickname}: ${msg}`);
     done(); //triggers function located at frontend
@@ -159,6 +159,9 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     // version A
     socket.to(roomId).emit('user-connected', userId);
+  });
+});
+
 
 /****** Chat, Video ******/
 
