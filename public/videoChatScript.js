@@ -8,7 +8,7 @@ const cameraBtn = document.querySelector("#camera");
 const myPeer = new Peer(undefined, {
     path: "/peerjs",
     host: "/",
-    port: "3000"
+    port: "443"
 });
 const myDiv = document.createElement("div");
 const myVideo = document.createElement("video");
@@ -60,6 +60,10 @@ navigator.mediaDevices.getUserMedia({
         handleCameraClick(stream);
     });
 
+    cameraSelect.addEventListener("input", () => {
+     handleCameraChange(stream);
+    });
+
 })
 
 socket.on("user-disconnected", userId => {
@@ -74,25 +78,6 @@ myPeer.on("open", userId => {
     socket.emit("join-room", ROOM_ID, userId);
 })
 
-
-// function connectToNewUser(userId, stream){
-//     // newPeer의 userID, 나의 stream
-//     const call = myPeer.call(userId, stream);
-//     const userDiv = document.createElement("div");
-//     const video = document.createElement("video");
-//     const userNickDiv = document.createElement("span");
-
-//     // 상대방이 그들의 video stream 보내면 작동
-//     call.on("stream", userVideoStream => {
-//         addVideoStream(video, userDiv, userNickDiv, userVideoStream, stream.id);
-//     });
-
-//     call.on("close", () => {
-//         video.remove();
-//     });
-
-//     peers[userId] = call;
-// }
 
 function connectToNewUser(userId, NICKNAME, stream){
     // newPeer의 userID, 나의 stream
@@ -119,8 +104,6 @@ function addVideoStream(video, userDiv, userNickDiv, stream, NICKNAME, userId){
         video.play();
     });
     
-    //const userDiv = document.createElement("div");
-    //const userNickDiv = document.createElement("span");
     userNickDiv.innerText = NICKNAME;
     userDiv.append(video)
     userDiv.append(userNickDiv);

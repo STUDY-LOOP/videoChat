@@ -161,4 +161,4 @@ io.on("connection", socket => {
     })
 });
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
-server.listen(process.env.PORT || 3000, handleListen);
+server.listen(process.env.PORT || 443, handleListen);

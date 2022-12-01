@@ -8,7 +8,6 @@
     <script>
         const ROOM_ID = "<%= roomID %>" 
         const NICKNAME = "<%= nickname %>"
-       
     </script>
 
     <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
@@ -20,7 +19,11 @@
 
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"></style>
     <style>
+        body{
+            background-color:lightgray;
+        }
         #video-grid {
+            padding-top: 150px;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -31,10 +34,20 @@
             height: 300px;
             padding: 10px;
             object-fit: cover;        
-        }        
+        }
+
+        #setting-grid{
+            position: fixed;
+            bottom: 0;
+            margin: 30px;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <h1> TEAM12 - VIDEO CHAT</h1>
+    </header>
+
     <div id="video-grid"></div>
     
     <div id="setting-grid">
