@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+        const ROOM_ID = "<%= roomId %>" 
+        const NICKNAME = "<%= nickname %>"
+       
+    </script>
+
+    <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+
+    <title>VIDEO CHAT</title>
+    <base href="/">
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"></style>
+    <style>
+        #video-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        video {
+            width: 400px;
+            height: 300px;
+            padding: 10px;
+            object-fit: cover;        
+        }        
+    </style>
+</head>
+<body>
+    <div id="video-grid"></div>
+    <div id="setting-grid">
+        <button id="mute">Mute</button>
+        <button id="camera">Turn Camera Off</button>
+    </div>
+</body>
+</html>
