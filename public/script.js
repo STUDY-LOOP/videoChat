@@ -10,7 +10,10 @@ const myPeer = new Peer(undefined, {
     host: "/",
     port: "3000"
 });
+const myDiv = document.createElement("div");
 const myVideo = document.createElement("video");
+const myNickDiv = document.createElement("span");
+
 myVideo.muted = true;
 
 const peers = [];
@@ -23,14 +26,16 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 }).then( stream => {
     // my stream
-    addVideoStream(myVideo, stream, NICKNAME);
+    addVideoStream(myVideo, myDiv, myNickDiv, stream, NICKNAME);
     
     myPeer.on("call", call => {
         call.answer(stream);    // peer 의 stream 보냄
 
+        const userDiv = document.createElement("div");
         const video = document.createElement('video')
+        const userNickDiv = document.createElement("span");
         call.on("stream", userVideoStream => {
-            addVideoStream(video, userVideoStream, stream.id)
+            addVideoStream(video, userDiv, userNickDiv, userVideoStream, stream.id)
         })
     })
     
@@ -78,11 +83,13 @@ myPeer.on("open", userId => {
 function connectToNewUser(userId, stream){
     // newPeer의 userID, 나의 stream
     const call = myPeer.call(userId, stream);
+    const userDiv = document.createElement("div");
     const video = document.createElement("video");
+    const userNickDiv = document.createElement("span");
 
     // 상대방이 그들의 video stream 보내면 작동
     call.on("stream", userVideoStream => {
-        addVideoStream(video, userVideoStream, stream.id);
+        addVideoStream(video, userDiv, userNickDiv, userVideoStream, stream.id);
     });
 
     call.on("close", () => {
@@ -92,14 +99,14 @@ function connectToNewUser(userId, stream){
     peers[userId] = call;
 }
 
-function addVideoStream(video, stream, userId){
+function addVideoStream(video, userDiv, userNickDiv, stream, userId){
     video.srcObject = stream;
     video.addEventListener("loadedmetadata", () => {
         video.play();
     });
     
-    const userDiv = document.createElement("div");
-    const userNickDiv = document.createElement("div");
+    //const userDiv = document.createElement("div");
+    //const userNickDiv = document.createElement("span");
     userNickDiv.innerText = userId;
     userDiv.append(video)
     userDiv.append(userNickDiv);

@@ -1,82 +1,202 @@
-const express = require("express");
+const express = require('express');
+const { ExpressPeerServer } = require('peer');
 const app = express();
-const session = require('express-session');
-const fileStore = require('session-file-store')(session);
+
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const { ExpressPeerServer } = require('peer');
+const session = require("express-session");
+const MemoryStore = require('memorystore')(session);
+const { v4: uuidV4 } = require("uuid");
+
 const peerServer = ExpressPeerServer(server, {
     debug: true
-  });
-const { v4: uuidV4 } = require("uuid");
+}); 
+
 
 let studyRoomId;
 let Nickname;
 
-app.use('/peerjs', peerServer);
+/****** Database ******/
+
+const mysql = require("mysql");
+const { connect } = require("http2");
+const connectDB = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: "rootpw",
+    database: "team12"
+});
+connectDB.connect();
+
+var dateTime = new Date();
+//console.log(dateTime);
+var year = dateTime.getFullYear();
+var month = dateTime.getMonth() + 1;
+var day = dateTime.getDate();
+var time = `${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
+//console.log(`year: ${year}, month: ${month}, day: ${day}, time: ${time}`);
+var formattedDateTime = `${year}-${month}-${day} ${time}`;
+//console.log(formattedDateTime);
+
+/****** view, server setting ******/
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
-app.use(express.urlencoded({extended:false}));      // body-parser
+app.use(express.urlencoded({ extended: false }));      // body-parser
+app.use('/peerjs', peerServer);
 
-/*
-//express-session 세션 - 두 사용자가 한 방에 안 들어오는 문제
-app.use(
-    session({
-        secure: true, 
-        secret: 'keyboard cat',
-        //secret: process.env.COOKIE_SECRET, //암호화
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            httpOnly: true,
-            secure: true,
-        },
-        store: new fileStore() //세션 스토어 적용
+app.use(session({
+    secret: "cse",	// 원하는 문자 입력
+    resave: false,
+    saveUninitialized: false,
+    store: new MemoryStore(),
+}));
+
+
+/****** Rendering ******/
+
+app.get("/", (req, res) => {
+    res.render("main");
+});   
+
+app.post("/", (req, res) => {
+    res.render("main");
+});
+app.post('/signup', function(req, res) {
+    res.render("signup");
+});
+app.post('/signup_process', function(req, res) {
+    let input_id = req.body.input_id;
+    let input_pw = req.body.input_pw;
+
+    connectDB.query('SELECT * FROM user WHERE u_id = ?', [input_id], function(error, results, fields) {
+        if (error) console.log(error);
+        if (results.length == 0) {
+            connectDB.query('INSERT INTO `user`(u_id, password) VALUES (?, ?)', [input_id, input_pw], (error, results, fields) => {
+                if (error) console.log(error);
+                else {
+                    console.log("회원가입성공");
+                    res.render("main");
+                }
+                res.end();
+            });
+        } else {
+            res.send('<script type="text/javascript">alert("이미 존재하는 아이디입니다."); document.location.replace("/signup");</script>');
+            res.end();
+        }
     })
-);
-*/
+});
+app.post('/login', function(req, res) {
+    let username = req.body.input_id;
+    let password = req.body.input_pw;
 
-/*
-app.get("/", (req, res) => {
-    console.log(req.session);
-
-    if(!req.session.num){
-        req.session.num = 1;
-    } else {
-        req.session.num = req.session.num + 1;
+    if (username && password) {
+        connectDB.query('SELECT * FROM user WHERE u_id = ? AND password = ?', [username, password], function(error, results, fields) {
+            console.log(username, password)
+            if (error) throw error;
+            if (results.length > 0) {
+                req.session.loggedin = true;
+                req.session.username = username;
+                res.render("studyList");
+                res.end();
+            } else {
+                res.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); document.location.href="/";</script>');
+            }            
+        });
+    } else {        
+        res.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/";</script>');    
+        res.end();
     }
-    res.render("studyHome");
-});
-*/
-
-app.get("/", (req, res) => {
-    res.render("studyHome");
 });
 
-app.post("/videoChat", (req, res) => {
-    console.log("roomId: " + req.body.StudyName); 
-    //console.log("userId: " + req.body.userId);
-    console.log("nickname: " + req.body.Nickname);
+app.get("/studyList", (req, res) => {
+    res.render("studyList");
+});
+app.post("/studyHome", (req, res) => {
     studyRoomId = req.body.StudyName;
-    Nickname = req.body.Nickname;
-    res.render("videoChat", {roomId: studyRoomId, nickname: Nickname});   
+    //Nickname = req.body.Nickname;
+    Nickname = req.session.username;
+    res.render("studyHome", { roomID: studyRoomId, nickname: Nickname });
+
+});
+app.post('/videoChat', (req, res) => {
+  studyRoomId = req.body.StudyName;
+  Nickname = req.body.Nickname;
+  res.render('videoChat', { roomID: studyRoomId, nickname: Nickname });
 });
 
-io.on("connection", socket => {
+io.on('connection', (socket) => {
+  //msg chat
+  socket['nickname'] = 'Anonymous';
+  // socket.onAny((event) => {
+  //     console.log(`Socket Event: ${event}`);
+  // });
+  socket.on('enter_chat_room', (chatRoomName, done) => {
+    socket.join(chatRoomName);
+    done();
+    //socket.to(roomName).emit('welcome', socket.nickname);
+  });
+  // socket.on('disconnecting', () => {
+  //     socket.rooms.forEach((room) =>
+  //     socket.to(room).emit('bye', socket.nickname)
+  //     );
+  // });
+  socket.on('new_message', (msg, room, done) => {
+    connectDB.query(
+      `INSERT INTO chat (room_id, u_id, notice, content, datetime) VALUES ('${studyRoomId}', '${Nickname}', 0, '${msg}', '${formattedDateTime}')`
+    );
+    socket.to(room).emit('new_message', `${socket.nickname}: ${msg}`);
+    done(); //triggers function located at frontend
+  });
+  socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
+  socket.on('new_notice', (msg, room, done) => {
+    socket.to(room).emit('new_notice', `NOTICE: ${msg}`);
+    done();
+  });
 
-    socket.on("join-room", (roomId, userId) => {  
-        //console.log("userId: "+ userId);
+  //video chat
+  socket.on('join-room', (roomId, userId) => {
+    socket.join(roomId);
+    // version A
+    socket.to(roomId).emit('user-connected', userId);
+  });
+});
+
+
+/****** Chat, Video ******/
+
+io.on("connection", socket => {    
+    //msg chat
+    socket['nickname'] = 'Anonymous';
+    socket.on('enter_chat_room', (chatRoomName, done) => {
+        socket.join(chatRoomName);
+        done();
+    });
+    socket.on('new_message', (msg, room, done) => {
+        socket.to(room).emit('new_message', `${socket.nickname}: ${msg}`);
+        done(); //triggers function located at frontend
+    });
+    socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
+    socket.on('new_notice', (msg, room, done) => {
+        socket.to(room).emit('new_notice', `NOTICE: ${msg}`);
+        done();
+    });
+    
+    //video chat
+    socket.on("join-room", (roomId, userId) => {
+
         socket.join(roomId);
+
 
         socket.on('connection-request',(roomId, userId, nickname) => {
             socket.to(roomId).emit("new-user-connected", userId, nickname);
         });
 
-        socket.on("disconnect", () => {
-            socket.to(roomId).emit("user-disconnected", userId);
+        socket.on('disconnect', () => {
+            socket.to(roomId).emit('user-disconnected', userId);
         });
     })
 });
-
-server.listen(process.env.PORT||3000);
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+server.listen(process.env.PORT || 3000, handleListen);

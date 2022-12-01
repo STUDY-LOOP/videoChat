@@ -9,6 +9,8 @@
     <script>
         const ROOM_ID = "<%= roomID %>"
         const NICKNAME = "<%= nickname %>"
+
+        console.log(ROOM_ID, NICKNAME);
     </script>
     <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
@@ -34,6 +36,7 @@
 </head>
 <body>
     <div id="video-grid"></div>
+    <br><br><br>
     <div id="setting-grid">
         <button id="mute">Mute</button>
         <button id="camera">Turn Camera Off</button>
