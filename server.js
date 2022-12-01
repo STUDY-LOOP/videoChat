@@ -124,34 +124,6 @@ app.post('/videoChat', (req, res) => {
   res.render('videoChat', { roomID: studyRoomId, nickname: Nickname });
 });
 
-// io.on('connection', (socket) => {
-//   //msg chat
-//   socket['nickname'] = 'Anonymous';
-//   socket.on('enter_chat_room', (chatRoomName, done) => {
-//     socket.join(chatRoomName);
-//     done();
-//   });
-//   socket.on('new_message', (msg, room, done) => {
-//     connectDB.query(
-//       `INSERT INTO chat (room_id, u_id, notice, content, datetime) VALUES ('${studyRoomId}', '${Nickname}', 0, '${msg}', '${formattedDateTime}')`
-//     );
-//     socket.to(room).emit('new_message', `${socket.nickname}: ${msg}`);
-//     done(); //triggers function located at frontend
-//   });
-//   socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
-//   socket.on('new_notice', (msg, room, done) => {
-//     socket.to(room).emit('new_notice', `NOTICE: ${msg}`);
-//     done();
-//   });
-
-// //   //video chat
-// //   socket.on('join-room', (roomId, userId) => {
-// //     socket.join(roomId);
-// //     // version A
-// //     socket.to(roomId).emit('user-connected', userId);
-
-// //   });
-// });
 
 
 /****** Chat, Video ******/

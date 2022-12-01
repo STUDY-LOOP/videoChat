@@ -50,13 +50,13 @@
     <tr>
         <td>04</td>
         <td>server.js</td>
-        <td>chat_app.js</td>
+        <td>studyHomeChatScript.js</td>
         <td>studyHome.ejs</td>
     </tr>
     <tr>
         <td>05</td>
         <td>server.js</td>
-        <td>script.js</td>
+        <td>videoChatScript.js</td>
         <td>videoChat.ejs</td>
     </tr>
 </table>
