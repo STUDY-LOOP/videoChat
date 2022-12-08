@@ -12,7 +12,6 @@
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="studyHomeChatScript.js"></script>
     <title>STUDY HOME</title>
-    <!--link rel="stylesheet" type="text/css" href="https://unpkg.com/mvp.css@1.12/mvp.css"-->
 
     <style>
         header {
@@ -94,7 +93,7 @@
             grid-row: 4 / 5;
         }
 
-        .fake_btn{
+        .btn_bottom{
             border-radius: 10%;
             width: 50px;
             padding: 3px;
@@ -128,7 +127,7 @@
 
     <div class="container">
         <div id="calendar" class="cell-a">
-            <img src="/calendar" alt="calendar"/>
+            <img src="/calendar" alt="calendar" onclick="location.href='/studyDetail'"/>
         </div>
 
         <div id="chatRoom" class="cell-b">
@@ -150,9 +149,9 @@
         </div>
 
         <div id="buttons" class="cell-e">
-            <button class="fake_btn">📗</button>
-            <button class="fake_btn">📑</button>
-            <button class="fake_btn">👩</button>
+            <button class="btn_bottom" onclick="location.href='/studyAssignment'">📗</button>
+            <button class="btn_bottom" onclick="location.href='/studyArchive'">📑</button>
+            <button class="btn_bottom" onclick="location.href='/studyMember'">👩</button>
         </div>
 
         <div id="videoEnter" class="cell-f">

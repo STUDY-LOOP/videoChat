@@ -1,12 +1,13 @@
 -- DB 정보
--- host: 'localhost',
--- port: 3306,
--- user: 'root',
--- password: "rootpw", //'rootpw', //jinseo00
+-- host: 'localhost'
+-- port: 3306
+-- user: 'root'
+-- password: "rootpw"
 -- database: "team12"
 
-CREATE DATABASE `team12`; -- !40100 DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_bin */ /*!80016 DEFAULT ENCRYPTION='N';
-USE `team12`;
+-- DB 생성 쿼리
+-- CREATE DATABASE `team12`;
+-- USE `team12`;
 
 CREATE TABLE `user` (
   `u_id` varchar(20) NOT NULL,

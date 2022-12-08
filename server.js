@@ -152,6 +152,52 @@ app.get('/calendar', (req, res) => {
   });
 });
 
+// prototype (최종제출물)
+app.get('/studyAssignment', (req, res) => {
+  res.render('studyAssignment');
+});
+app.get('/studyArchive', (req, res) => {
+  res.render('studyArchive');
+});
+app.get('/studyMember', (req, res) => {
+  res.render('studyMember');
+});
+app.get('/studyDetail', (req, res) => {
+  res.render('studyDetail');
+});
+app.get('/prototypeAssignment', (req, res) => {
+  readFile('team12/prototypeAssignment.jpg', (err, data) => {
+    if (err) {
+      res.send();
+    }
+    res.send(data);
+  });
+});
+app.get('/prototypeArchive', (req, res) => {
+  readFile('team12/prototypeArchive.jpg', (err, data) => {
+    if (err) {
+      res.send();
+    }
+    res.send(data);
+  });
+});
+app.get('/prototypeMember', (req, res) => {
+  readFile('team12/prototypeMember.jpg', (err, data) => {
+    if (err) {
+      res.send();
+    }
+    res.send(data);
+  });
+});
+app.get('/prototypeDetail', (req, res) => {
+  readFile('team12/prototypeDetail.jpg', (err, data) => {
+    if (err) {
+      res.send();
+    }
+    res.send(data);
+  });
+});
+
 /****** Chat, Video ******/
 
 io.on('connection', (socket) => {
