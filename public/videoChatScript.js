@@ -8,7 +8,7 @@ const cameraBtn = document.querySelector("#camera");
 const myPeer = new Peer(undefined, {
     path: "/peerjs",
     host: "/",
-    port: "443"
+    port: "3000"
 });
 const myDiv = document.createElement("div");
 const myVideo = document.createElement("video");
