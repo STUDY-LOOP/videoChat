@@ -17,7 +17,7 @@
 
 2022-1 캡스톤디자인과창업프로젝트A를 수강하며 진행한 토이프로젝트입니다.
 
-화상회의, 채팅, 로그인 기능이 구현되었고 <br>
+화상회의, 채팅, 로그인 기능이 구현되어 사용 가능하고 <br>
 스터디 홈, 회차별 세부 페이지, 과제함, 스터디원 정보, 아카이브에 대한 프로토타입이 포함되어 있습니다. 
 
 <br>
@@ -28,6 +28,7 @@
 
 ## 실행 환경
 NodeJS 및 MySQL에 대한 사전 설치가 필요합니다.
+Chrome을 통해 접속할 것을 권장합니다.
 
 <br>
 
@@ -35,20 +36,21 @@ NodeJS 및 MySQL에 대한 사전 설치가 필요합니다.
 
 ## 실행 방법 (local)
 
-깃허브 리포지토리를 클론 받습니다.
-```cmd
-git clone https://github.com/capstone-design-cse/videoChat.git
-```
+깃허브 리포지토리를 다운받고 압축을 해제합니다. 
+
+<br>
 
 MySQL에 접속해 데이터베이스를 생성합니다.
+* 본인의 MySQL 계정 정보를 videoChat/server.js 파일의 25번째 줄의 `const connectDB = mysql.createConnection({ ... })`에 업데이트 해야 합니다.
 ```sql
-mysql -u root -prootpw
+mysql -u root -p
+> password: rootpw
 
 CREATE DATABASE `team12`;
 USE `team12`;
 ```
 
-videoChat/team12/team12.sql 파일을 실행합니다. (파일 경로 확인)
+videoChat/team12/team12.sql 파일을 실행합니다. (파일 경로를 확인해주세요)
 ```cmd
 source C:\videoChat\team12\team12.sql
 
@@ -58,7 +60,7 @@ source C:\videoChat\team12\team12.sql
 exit
 ```
 
-클론 받은 videoChat 폴더로 이동합니다.
+다운받은 videoChat 폴더로 이동합니다.
 ```cmd
 cd C:\videoChat
 ```
@@ -106,10 +108,13 @@ const myPeer = new Peer(undefined, {
 node server.js
 ```
 
-아래 주소에 접속합니다. 
+새로운 터미널을 열어 localtunnel을 실행합니다.
 ```cmd
-localhost:433
+lt --port 443
 ```
+
+localtunnel 실행 결과로 출력된 주소에 접속합니다. 
+
 <br>
 
 ---
